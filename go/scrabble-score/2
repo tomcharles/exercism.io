@@ -1,0 +1,38 @@
+package scrabble
+
+import "strings"
+
+var letterValues = []struct {
+	letters []rune
+	value   int
+}{
+	{[]rune{'A', 'E', 'I', 'O', 'U', 'L', 'N', 'R', 'S', 'T'}, 1},
+	{[]rune{'D', 'G'}, 2},
+	{[]rune{'B','C','M','P'}, 3},
+	{[]rune{'F','H','V','W','Y'}, 4},
+	{[]rune{'K'}, 5},
+	{[]rune{'J','X'}, 8},
+	{[]rune{'Q','Z'}, 10},
+}
+
+func Score(word string) int {
+	score := 0
+	for _, char := range strings.ToUpper(word) {
+		for _, lv := range letterValues {
+			if contains(lv.letters, char) {
+				score += lv.value
+				break
+			}
+		}
+	}
+	return score
+}
+
+func contains(a []rune, x rune) bool {
+	for _, n := range a {
+		if x == n {
+			return true
+		}
+	}
+	return false
+}
