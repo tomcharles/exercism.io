@@ -1,44 +1,32 @@
-// Package clock does
 package clock
 
 import "fmt"
 
-// Clock says
-type Clock struct {
-	hour   int
-	minute int
-}
+// Clock represents the time of day in seconds
+type Clock int
 
-// New says
+const day int = 60 * 24
+
+// New initializes a Clock from hours and minutes
 func New(h, m int) Clock {
-	addHours := m / 60
-	hour := 0 + (h+addHours)%24
-	if hour < 0 {
-		hour = 24 + hour
+	time := (h*60 + m) % day
+	if time < 0 {
+		time += day
 	}
-	if m < 0 && addHours != 0 {
-		hour = hour - 1
-	}
-
-	minute := 0 + (m % 60)
-	if minute < 0 {
-		minute = 60 + minute
-	}
-
-	return Clock{hour: hour, minute: minute}
+	return Clock(time)
 }
 
-// Add says
+// Add minutes to an existing Clock
 func (c Clock) Add(m int) Clock {
-	return New(c.hour, c.minute+m)
+	return New(0, int(c)+m)
 }
 
-// Subtract syas
+// Subtract minutes from an existing Clock
 func (c Clock) Subtract(m int) Clock {
-	return New(c.hour, c.minute-m)
+	return New(0, int(c)-m)
 }
 
-// String says
+// String format a clock as mm:hh
 func (c Clock) String() string {
-	return fmt.Sprintf("%02d:%02d", c.hour, c.minute)
+	return fmt.Sprintf("%02d:%02d", c/60, c%60)
 }
